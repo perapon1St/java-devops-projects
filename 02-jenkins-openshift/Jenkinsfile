@@ -1,0 +1,69 @@
+pipeline {
+    agent any
+
+    environment {
+        HARBOR_REGISTRY = 'harbor.example.com'
+        IMAGE_NAME      = "${HARBOR_REGISTRY}/myproject/myapp"
+        IMAGE_TAG       = "${env.BUILD_NUMBER}"
+        OC_PROJECT      = 'production'
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Build') {
+            steps {
+                sh './mvnw clean package -DskipTests'
+                sh "docker build -t ${IMAGE_NAME}:${IMAGE_TAG} ."
+            }
+        }
+
+        stage('Test') {
+            steps {
+                sh './mvnw test'
+            }
+            post {
+                always {
+                    junit 'target/surefire-reports/*.xml'
+                }
+            }
+        }
+
+        stage('Push to Harbor') {
+            steps {
+                withCredentials([usernamePassword(
+                    credentialsId: 'harbor-credentials',
+                    usernameVariable: 'HARBOR_USER',
+                    passwordVariable: 'HARBOR_PASS'
+                )]) {
+                    sh "echo $HARBOR_PASS | docker login ${HARBOR_REGISTRY} -u $HARBOR_USER --password-stdin"
+                    sh "docker push ${IMAGE_NAME}:${IMAGE_TAG}"
+                }
+            }
+        }
+
+        stage('Deploy to OpenShift') {
+            steps {
+                withCredentials([string(credentialsId: 'openshift-token', variable: 'OC_TOKEN')]) {
+                    sh "oc login --token=${OC_TOKEN} --server=https://openshift.example.com"
+                    sh "oc project ${OC_PROJECT}"
+                    sh "oc set image deployment/myapp myapp=${IMAGE_NAME}:${IMAGE_TAG}"
+                    sh "oc rollout status deployment/myapp"
+                }
+            }
+        }
+    }
+
+    post {
+        success {
+            echo "Deployment successful: ${IMAGE_NAME}:${IMAGE_TAG}"
+        }
+        failure {
+            echo "Pipeline failed. Check logs above."
+        }
+    }
+} 
