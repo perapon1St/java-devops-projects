@@ -25,7 +25,13 @@ public class ProductController {
         if (keyword == null || keyword.isBlank()) {
             throw new IllegalArgumentException("keyword must not be empty");
         }
-        ProductSearchResponse response = tiktokShopService.searchProducts(keyword, region, count, cursor);
+        ProductSearchRequest request = new ProductSearchRequest();
+        request.setKeyword(keyword);
+        request.setRegion(region);
+        request.setCount(count);
+        request.setCursor(cursor);
+        ProductSearchResponse response = tiktokShopService.searchProducts(
+                request.getKeyword(), request.getRegion(), request.getCount(), request.getCursor());
         return ResponseEntity.ok(response);
     }
 

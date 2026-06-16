@@ -23,7 +23,7 @@ public class TiktokShopService {
     public ProductSearchResponse searchProducts(String keyword, String region, int count, int cursor) {
         log.info("Service: searching products keyword={}, region={}, count={}, cursor={}", keyword, region, count, cursor);
         Map response = apiClient.searchProducts(keyword, region, count, cursor).block();
-        return mapToProductSearchResponse(response, null);
+        return mapToProductSearchResponse(response);
     }
 
     public ProductDetailResponse getProductDetail(String productId, String region) {
@@ -48,7 +48,7 @@ public class TiktokShopService {
     }
 
     @SuppressWarnings("unchecked")
-    private ProductSearchResponse mapToProductSearchResponse(Map raw, String userId) {
+    private ProductSearchResponse mapToProductSearchResponse(Map raw) {
         ProductSearchResponse response = new ProductSearchResponse();
         if (raw == null) {
             response.setProducts(Collections.emptyList());
