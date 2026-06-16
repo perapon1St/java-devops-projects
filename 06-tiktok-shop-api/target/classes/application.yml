@@ -1,21 +1,10 @@
 server:
   port: 8080
 
-<<<<<<< HEAD
-=======
-tiktokshop:
-  api:
-    base-url: https://tiktok-shop-api.p.rapidapi.com
-    rapidapi-key: ${RAPIDAPI_KEY:your-rapidapi-key-here}
-    rapidapi-host: tiktok-shop-api.p.rapidapi.com
-    timeout-seconds: 10
-
->>>>>>> origin/main
 spring:
   application:
     name: tiktok-shop-api
 
-<<<<<<< HEAD
 tiktokshop:
   api:
     base-url: ${TIKTOK_API_BASE_URL:https://tiktok-shop-api.p.rapidapi.com}
@@ -24,8 +13,12 @@ tiktokshop:
     connect-timeout-ms: ${TIKTOK_API_CONNECT_TIMEOUT_MS:5000}
     read-timeout-seconds: ${TIKTOK_API_READ_TIMEOUT_SECONDS:10}
 
-=======
->>>>>>> origin/main
+# Dashboard login credentials — override via DASHBOARD_ADMIN_USERNAME / DASHBOARD_ADMIN_PASSWORD env vars
+dashboard:
+  admin:
+    username: ${DASHBOARD_ADMIN_USERNAME:admin}
+    password: ${DASHBOARD_ADMIN_PASSWORD:admin123}
+
 management:
   endpoints:
     web:
@@ -38,7 +31,4 @@ management:
 logging:
   level:
     com.tiktokshop: INFO
-<<<<<<< HEAD
     org.springframework.web.reactive.function.client: DEBUG
-=======
->>>>>>> origin/main
