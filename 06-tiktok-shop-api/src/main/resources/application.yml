@@ -13,6 +13,12 @@ tiktokshop:
     connect-timeout-ms: ${TIKTOK_API_CONNECT_TIMEOUT_MS:5000}
     read-timeout-seconds: ${TIKTOK_API_READ_TIMEOUT_SECONDS:10}
 
+# Dashboard login credentials — override via DASHBOARD_ADMIN_USERNAME / DASHBOARD_ADMIN_PASSWORD env vars
+dashboard:
+  admin:
+    username: ${DASHBOARD_ADMIN_USERNAME:admin}
+    password: ${DASHBOARD_ADMIN_PASSWORD:admin123}
+
 management:
   endpoints:
     web:
