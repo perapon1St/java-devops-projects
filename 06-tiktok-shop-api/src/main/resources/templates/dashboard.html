@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TikTok Shop – Dashboard</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f5f5;
+            color: #222;
+        }
+
+        /* ── Navbar ── */
+        .navbar {
+            background: #010101;
+            color: #fff;
+            height: 56px;
+            display: flex;
+            align-items: center;
+            padding: 0 24px;
+            gap: 12px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        }
+
+        .navbar-logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .navbar-logo svg {
+            width: 24px;
+            height: 24px;
+            fill: #fff;
+        }
+
+        .navbar-title {
+            font-size: 17px;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+        }
+
+        .navbar-spacer { flex: 1; }
+
+        .navbar-user {
+            font-size: 13px;
+            color: #aaa;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-logout {
+            background: transparent;
+            border: 1px solid #555;
+            color: #ccc;
+            padding: 5px 14px;
+            border-radius: 6px;
+            font-size: 13px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: border-color 0.2s, color 0.2s;
+        }
+
+        .btn-logout:hover { border-color: #fff; color: #fff; }
+
+        /* ── Main ── */
+        .main { max-width: 1200px; margin: 0 auto; padding: 32px 24px; }
+
+        /* ── Stats ── */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .stat-card {
+            background: #fff;
+            border-radius: 12px;
+            padding: 20px 24px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+        }
+
+        .stat-label {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            color: #888;
+            margin-bottom: 6px;
+        }
+
+        .stat-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: #010101;
+        }
+
+        /* ── Search Panel ── */
+        .search-panel {
+            background: #fff;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+            margin-bottom: 28px;
+        }
+
+        .search-panel h2 {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: #010101;
+        }
+
+        .search-form {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            align-items: flex-end;
+        }
+
+        .form-field {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .form-field label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #555;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .form-field input,
+        .form-field select {
+            padding: 9px 14px;
+            border: 1.5px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            color: #333;
+            outline: none;
+            transition: border-color 0.2s;
+            min-width: 180px;
+        }
+
+        .form-field input:focus,
+        .form-field select:focus { border-color: #010101; }
+
+        .btn-search {
+            padding: 9px 24px;
+            background: #010101;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+            align-self: flex-end;
+        }
+
+        .btn-search:hover { background: #333; }
+
+        /* ── Results ── */
+        .results-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+
+        .results-header h2 {
+            font-size: 16px;
+            font-weight: 700;
+            color: #010101;
+        }
+
+        .badge {
+            background: #f0f0f0;
+            color: #555;
+            border-radius: 20px;
+            padding: 3px 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .badge-more {
+            background: #e8f5e9;
+            color: #27ae60;
+        }
+
+        /* ── Product Grid ── */
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 20px;
+        }
+
+        .product-card {
+            background: #fff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+            transition: transform 0.15s, box-shadow 0.15s;
+        }
+
+        .product-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+        }
+
+        .product-cover {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            background: #f0f0f0;
+        }
+
+        .product-cover-placeholder {
+            width: 100%;
+            height: 180px;
+            background: linear-gradient(135deg, #f5f5f5, #e8e8e8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #bbb;
+            font-size: 40px;
+        }
+
+        .product-body { padding: 16px; }
+
+        .product-title {
+            font-size: 14px;
+            font-weight: 600;
+            line-height: 1.4;
+            color: #111;
+            margin-bottom: 8px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .product-price {
+            font-size: 18px;
+            font-weight: 700;
+            color: #e74c3c;
+            margin-bottom: 8px;
+        }
+
+        .product-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            font-size: 12px;
+            color: #777;
+        }
+
+        .meta-chip {
+            display: flex;
+            align-items: center;
+            gap: 3px;
+        }
+
+        .stars { color: #f39c12; }
+
+        .product-seller {
+            margin-top: 10px;
+            font-size: 12px;
+            color: #999;
+            border-top: 1px solid #f0f0f0;
+            padding-top: 10px;
+        }
+
+        /* ── Empty / Error states ── */
+        .empty-state {
+            text-align: center;
+            padding: 60px 0;
+            color: #aaa;
+        }
+
+        .empty-state .icon { font-size: 48px; margin-bottom: 16px; }
+        .empty-state h3 { font-size: 18px; font-weight: 600; color: #555; margin-bottom: 8px; }
+        .empty-state p { font-size: 14px; }
+
+        .alert-error {
+            background: #fff0f0;
+            border: 1px solid #f5c6cb;
+            color: #c0392b;
+            border-radius: 8px;
+            padding: 14px 18px;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar">
+    <div class="navbar-logo">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.27 6.27 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.77a4.85 4.85 0 0 1-1.01-.08z"/>
+        </svg>
+        <span class="navbar-title">TikTok Shop Dashboard</span>
+    </div>
+    <div class="navbar-spacer"></div>
+    <div class="navbar-user">
+        <span sec:authentication="name">User</span>
+        <a th:href="@{/logout}" class="btn-logout">Sign Out</a>
+    </div>
+</nav>
+
+<main class="main">
+
+    <!-- Stats Summary -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-label">Total Products Found</div>
+            <div class="stat-value"
+                 th:text="${searchResult != null and searchResult.products != null} ? ${#lists.size(searchResult.products)} : '–'">–</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">More Results</div>
+            <div class="stat-value"
+                 th:text="${searchResult != null} ? (${searchResult.hasMore} ? 'Yes' : 'No') : '–'">–</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">Search Region</div>
+            <div class="stat-value" th:text="${region}">TH</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">Page Size</div>
+            <div class="stat-value" th:text="${count}">10</div>
+        </div>
+    </div>
+
+    <!-- Search Panel -->
+    <div class="search-panel">
+        <h2>🔍 Search TikTok Shop Products</h2>
+        <form class="search-form" th:action="@{/dashboard}" method="get">
+            <div class="form-field">
+                <label for="keyword">Keyword</label>
+                <input type="text" id="keyword" name="keyword"
+                       th:value="${keyword}" placeholder="e.g. labubu, skincare…" required>
+            </div>
+            <div class="form-field">
+                <label for="region">Region</label>
+                <select id="region" name="region">
+                    <option value="TH" th:selected="${region == 'TH'}">Thailand (TH)</option>
+                    <option value="US" th:selected="${region == 'US'}">United States (US)</option>
+                    <option value="GB" th:selected="${region == 'GB'}">United Kingdom (GB)</option>
+                    <option value="ID" th:selected="${region == 'ID'}">Indonesia (ID)</option>
+                    <option value="MY" th:selected="${region == 'MY'}">Malaysia (MY)</option>
+                    <option value="SG" th:selected="${region == 'SG'}">Singapore (SG)</option>
+                    <option value="VN" th:selected="${region == 'VN'}">Vietnam (VN)</option>
+                    <option value="PH" th:selected="${region == 'PH'}">Philippines (PH)</option>
+                </select>
+            </div>
+            <div class="form-field">
+                <label for="count">Results Per Page</label>
+                <select id="count" name="count">
+                    <option value="5"  th:selected="${count == 5}">5</option>
+                    <option value="10" th:selected="${count == 10}">10</option>
+                    <option value="20" th:selected="${count == 20}">20</option>
+                    <option value="50" th:selected="${count == 50}">50</option>
+                </select>
+            </div>
+            <button type="submit" class="btn-search">Search</button>
+        </form>
+    </div>
+
+    <!-- Error Message -->
+    <div th:if="${errorMessage}" class="alert-error">
+        ⚠️ <span th:text="${errorMessage}"></span>
+    </div>
+
+    <!-- Results -->
+    <div th:if="${searchResult != null}">
+        <div class="results-header">
+            <h2>Search Results
+                <span th:if="${keyword}" th:text="' for &quot;' + ${keyword} + '&quot;'"></span>
+            </h2>
+            <div>
+                <span class="badge"
+                      th:text="${#lists.size(searchResult.products)} + ' products'">0 products</span>
+                <span th:if="${searchResult.hasMore}" class="badge badge-more" style="margin-left:8px;">More available</span>
+            </div>
+        </div>
+
+        <!-- Empty results -->
+        <div th:if="${#lists.isEmpty(searchResult.products)}" class="empty-state">
+            <div class="icon">🔎</div>
+            <h3>No products found</h3>
+            <p>Try a different keyword or region.</p>
+        </div>
+
+        <!-- Product Grid -->
+        <div th:unless="${#lists.isEmpty(searchResult.products)}" class="product-grid">
+            <div th:each="product : ${searchResult.products}" class="product-card">
+                <img th:if="${product.coverUrl != null and !product.coverUrl.isEmpty()}"
+                     th:src="${product.coverUrl}"
+                     th:alt="${product.title}"
+                     class="product-cover"
+                     onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+                <div class="product-cover-placeholder"
+                     th:style="${product.coverUrl != null and !product.coverUrl.isEmpty()} ? 'display:none' : 'display:flex'">
+                    🛍
+                </div>
+
+                <div class="product-body">
+                    <div class="product-title" th:text="${product.title}">Product Title</div>
+
+                    <div class="product-price">
+                        <span th:if="${product.price != null and !product.price.isEmpty()}"
+                              th:text="${product.price} + ' ' + ${product.currency}">0.00 THB</span>
+                        <span th:unless="${product.price != null and !product.price.isEmpty()}">Price N/A</span>
+                    </div>
+
+                    <div class="product-meta">
+                        <span class="meta-chip" th:if="${product.rating > 0}">
+                            <span class="stars">★</span>
+                            <span th:text="${#numbers.formatDecimal(product.rating, 1, 1)}">0.0</span>
+                        </span>
+                        <span class="meta-chip" th:if="${product.reviewCount > 0}">
+                            💬 <span th:text="${product.reviewCount} + ' reviews'">0 reviews</span>
+                        </span>
+                        <span class="meta-chip" th:if="${product.soldCount > 0}">
+                            📦 <span th:text="${product.soldCount} + ' sold'">0 sold</span>
+                        </span>
+                        <span class="meta-chip" th:if="${product.discount > 0}">
+                            🏷 <span th:text="${#numbers.formatDecimal(product.discount, 1, 0)} + '% off'">0% off</span>
+                        </span>
+                    </div>
+
+                    <div class="product-seller"
+                         th:if="${product.sellerName != null and !product.sellerName.isEmpty()}"
+                         th:text="'Shop: ' + ${product.sellerName}">Shop: Seller</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Welcome state (no search yet) -->
+    <div th:if="${searchResult == null and (keyword == null or keyword.isEmpty())}"
+         class="empty-state">
+        <div class="icon">🛍️</div>
+        <h3>Welcome to TikTok Shop Dashboard</h3>
+        <p>Enter a keyword above to search for products across TikTok Shop regions.</p>
+    </div>
+
+</main>
+</body>
+</html>
