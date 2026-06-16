@@ -14,7 +14,11 @@
 | 3 | [Spring Boot API + Docker](./03-springboot-docker) | Java · Spring Boot · Docker · PostgreSQL | Production-ready REST API containerized with Docker |
 | 4 | [Kubernetes Deployment](./04-kubernetes) | Kubernetes · Helm · Harbor | Full K8s deployment with auto-scaling and rolling updates |
 | 5 | [Harbor Registry Setup](./05-harbor-registry) | Harbor · Docker · HTTPS | Private container registry setup with SSL and project policies |
+<<<<<<< HEAD
 | 6 | [TikTok Shop API Integration](./06-tiktok-shop-api) | Java · Spring Boot · WebClient · Docker | Spring Boot microservice for TikTok Shop API via RapidAPI |
+=======
+| 6 | [TikTok Shop API Microservice](./06-tiktok-shop-api) | Java · Spring Boot · WebClient · Docker | Spring Boot microservice integrating with TikTok Shop RapidAPI |
+>>>>>>> origin/main
 
 ---
 

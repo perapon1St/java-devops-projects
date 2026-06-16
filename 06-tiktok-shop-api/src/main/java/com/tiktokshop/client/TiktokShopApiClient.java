@@ -1,22 +1,34 @@
 package com.tiktokshop.client;
 
+<<<<<<< HEAD
 import com.fasterxml.jackson.databind.JsonNode;
 import com.tiktokshop.exception.TiktokShopApiException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+=======
+import com.tiktokshop.config.TiktokShopConfig;
+import com.tiktokshop.exception.TiktokShopApiException;
+import lombok.extern.slf4j.Slf4j;
+>>>>>>> origin/main
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 import reactor.core.publisher.Mono;
+<<<<<<< HEAD
 import reactor.util.retry.Retry;
 
 import java.time.Duration;
+=======
+
+import java.util.Map;
+>>>>>>> origin/main
 
 @Slf4j
 @Component
 public class TiktokShopApiClient {
 
     private final WebClient webClient;
+<<<<<<< HEAD
 
     private static final int MAX_RETRY_ATTEMPTS = 3;
     private static final Duration RETRY_BACKOFF = Duration.ofSeconds(1);
@@ -37,6 +49,17 @@ public class TiktokShopApiClient {
     public JsonNode getSellerProducts(String userId, String region, int count, long cursor) {
         log.info("Fetching seller products for userId={}, region={}, count={}, cursor={}",
                 userId, region, count, cursor);
+=======
+    private final TiktokShopConfig config;
+
+    public TiktokShopApiClient(WebClient tiktokShopWebClient, TiktokShopConfig config) {
+        this.webClient = tiktokShopWebClient;
+        this.config = config;
+    }
+
+    public Mono<Map> getSellerProducts(String userId, String region, int count, int cursor) {
+        log.info("Fetching products for seller: {}, region: {}", userId, region);
+>>>>>>> origin/main
         return webClient.get()
                 .uri(uriBuilder -> uriBuilder
                         .path("/seller/products")
@@ -46,6 +69,7 @@ public class TiktokShopApiClient {
                         .queryParam("cursor", cursor)
                         .build())
                 .retrieve()
+<<<<<<< HEAD
                 .bodyToMono(JsonNode.class)
                 .retryWhen(buildRetrySpec())
                 .onErrorMap(WebClientResponseException.class, this::mapApiException)
@@ -62,6 +86,20 @@ public class TiktokShopApiClient {
      */
     public JsonNode getProductDetail(String productId, String region) {
         log.info("Fetching product detail for productId={}, region={}", productId, region);
+=======
+                .bodyToMono(Map.class)
+                .timeout(config.getTimeout())
+                .onErrorMap(WebClientResponseException.class, ex ->
+                        new TiktokShopApiException(
+                                "TikTok Shop API error: " + ex.getResponseBodyAsString(),
+                                ex.getStatusCode().value(), ex))
+                .onErrorMap(ex -> !(ex instanceof TiktokShopApiException),
+                        ex -> new TiktokShopApiException("Failed to fetch seller products: " + ex.getMessage(), 500, ex));
+    }
+
+    public Mono<Map> getProductDetail(String productId, String region) {
+        log.info("Fetching product detail for id: {}, region: {}", productId, region);
+>>>>>>> origin/main
         return webClient.get()
                 .uri(uriBuilder -> uriBuilder
                         .path("/product/detail")
@@ -69,6 +107,7 @@ public class TiktokShopApiClient {
                         .queryParam("region", region)
                         .build())
                 .retrieve()
+<<<<<<< HEAD
                 .bodyToMono(JsonNode.class)
                 .retryWhen(buildRetrySpec())
                 .onErrorMap(WebClientResponseException.class, this::mapApiException)
@@ -89,6 +128,20 @@ public class TiktokShopApiClient {
     public JsonNode getProductReviews(String productId, String region, int count, long cursor, int sortType) {
         log.info("Fetching reviews for productId={}, region={}, count={}, cursor={}, sortType={}",
                 productId, region, count, cursor, sortType);
+=======
+                .bodyToMono(Map.class)
+                .timeout(config.getTimeout())
+                .onErrorMap(WebClientResponseException.class, ex ->
+                        new TiktokShopApiException(
+                                "TikTok Shop API error: " + ex.getResponseBodyAsString(),
+                                ex.getStatusCode().value(), ex))
+                .onErrorMap(ex -> !(ex instanceof TiktokShopApiException),
+                        ex -> new TiktokShopApiException("Failed to fetch product detail: " + ex.getMessage(), 500, ex));
+    }
+
+    public Mono<Map> getProductReviews(String productId, String region, int count, int cursor, int sortType) {
+        log.info("Fetching reviews for product: {}, region: {}", productId, region);
+>>>>>>> origin/main
         return webClient.get()
                 .uri(uriBuilder -> uriBuilder
                         .path("/product/reviews")
@@ -99,6 +152,7 @@ public class TiktokShopApiClient {
                         .queryParam("sort_type", sortType)
                         .build())
                 .retrieve()
+<<<<<<< HEAD
                 .bodyToMono(JsonNode.class)
                 .retryWhen(buildRetrySpec())
                 .onErrorMap(WebClientResponseException.class, this::mapApiException)
@@ -121,12 +175,30 @@ public class TiktokShopApiClient {
         return webClient.get()
                 .uri(uriBuilder -> uriBuilder
                         .path("/search/products")
+=======
+                .bodyToMono(Map.class)
+                .timeout(config.getTimeout())
+                .onErrorMap(WebClientResponseException.class, ex ->
+                        new TiktokShopApiException(
+                                "TikTok Shop API error: " + ex.getResponseBodyAsString(),
+                                ex.getStatusCode().value(), ex))
+                .onErrorMap(ex -> !(ex instanceof TiktokShopApiException),
+                        ex -> new TiktokShopApiException("Failed to fetch product reviews: " + ex.getMessage(), 500, ex));
+    }
+
+    public Mono<Map> searchProducts(String keyword, String region, int count, int cursor) {
+        log.info("Searching products with keyword: {}, region: {}", keyword, region);
+        return webClient.get()
+                .uri(uriBuilder -> uriBuilder
+                        .path("/product/search")
+>>>>>>> origin/main
                         .queryParam("keyword", keyword)
                         .queryParam("region", region)
                         .queryParam("count", count)
                         .queryParam("cursor", cursor)
                         .build())
                 .retrieve()
+<<<<<<< HEAD
                 .bodyToMono(JsonNode.class)
                 .retryWhen(buildRetrySpec())
                 .onErrorMap(WebClientResponseException.class, this::mapApiException)
@@ -151,5 +223,15 @@ public class TiktokShopApiClient {
         String message = "TikTok Shop API error: " + ex.getStatusCode() + " - " + ex.getResponseBodyAsString();
         log.error(message);
         return new TiktokShopApiException(message, status);
+=======
+                .bodyToMono(Map.class)
+                .timeout(config.getTimeout())
+                .onErrorMap(WebClientResponseException.class, ex ->
+                        new TiktokShopApiException(
+                                "TikTok Shop API error: " + ex.getResponseBodyAsString(),
+                                ex.getStatusCode().value(), ex))
+                .onErrorMap(ex -> !(ex instanceof TiktokShopApiException),
+                        ex -> new TiktokShopApiException("Failed to search products: " + ex.getMessage(), 500, ex));
+>>>>>>> origin/main
     }
 }

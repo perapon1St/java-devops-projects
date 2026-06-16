@@ -1,5 +1,6 @@
 package com.tiktokshop.config;
 
+<<<<<<< HEAD
 import io.netty.channel.ChannelOption;
 import io.netty.handler.timeout.ReadTimeoutHandler;
 import io.netty.handler.timeout.WriteTimeoutHandler;
@@ -14,10 +15,19 @@ import reactor.netty.http.client.HttpClient;
 
 import java.time.Duration;
 import java.util.concurrent.TimeUnit;
+=======
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.reactive.function.client.WebClient;
+
+import java.time.Duration;
+>>>>>>> origin/main
 
 @Configuration
 public class TiktokShopConfig {
 
+<<<<<<< HEAD
     @Value("${tiktokshop.api.base-url:https://tiktok-shop-api.p.rapidapi.com}")
     private String baseUrl;
 
@@ -50,4 +60,30 @@ public class TiktokShopConfig {
                 .clientConnector(new ReactorClientHttpConnector(httpClient))
                 .build();
     }
+=======
+    @Value("${tiktokshop.api.base-url}")
+    private String baseUrl;
+
+    @Value("${tiktokshop.api.rapidapi-key}")
+    private String rapidApiKey;
+
+    @Value("${tiktokshop.api.rapidapi-host}")
+    private String rapidApiHost;
+
+    @Value("${tiktokshop.api.timeout-seconds:10}")
+    private int timeoutSeconds;
+
+    @Bean
+    public WebClient tiktokShopWebClient(WebClient.Builder builder) {
+        return builder
+                .baseUrl(baseUrl)
+                .defaultHeader("x-rapidapi-key", rapidApiKey)
+                .defaultHeader("x-rapidapi-host", rapidApiHost)
+                .build();
+    }
+
+    public Duration getTimeout() {
+        return Duration.ofSeconds(timeoutSeconds);
+    }
+>>>>>>> origin/main
 }
