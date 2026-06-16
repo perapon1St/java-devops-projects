@@ -1,0 +1,26 @@
+server:
+  port: 8080
+
+tiktokshop:
+  api:
+    base-url: https://tiktok-shop-api.p.rapidapi.com
+    rapidapi-key: ${RAPIDAPI_KEY:your-rapidapi-key-here}
+    rapidapi-host: tiktok-shop-api.p.rapidapi.com
+    timeout-seconds: 10
+
+spring:
+  application:
+    name: tiktok-shop-api
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: always
+
+logging:
+  level:
+    com.tiktokshop: INFO
