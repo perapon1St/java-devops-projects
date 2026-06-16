@@ -1,0 +1,28 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: tiktok-shop-api
+
+tiktokshop:
+  api:
+    base-url: ${TIKTOK_API_BASE_URL:https://tiktok-shop-api.p.rapidapi.com}
+    rapidapi-key: ${RAPIDAPI_KEY:}
+    rapidapi-host: ${TIKTOK_API_HOST:tiktok-shop-api.p.rapidapi.com}
+    connect-timeout-ms: ${TIKTOK_API_CONNECT_TIMEOUT_MS:5000}
+    read-timeout-seconds: ${TIKTOK_API_READ_TIMEOUT_SECONDS:10}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: always
+
+logging:
+  level:
+    com.tiktokshop: INFO
+    org.springframework.web.reactive.function.client: DEBUG
