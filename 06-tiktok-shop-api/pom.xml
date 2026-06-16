@@ -7,7 +7,11 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
+<<<<<<< HEAD
+        <version>3.2.5</version>
+=======
         <version>3.2.0</version>
+>>>>>>> origin/main
         <relativePath/>
     </parent>
 
@@ -15,7 +19,11 @@
     <artifactId>tiktok-shop-api</artifactId>
     <version>1.0.0</version>
     <name>tiktok-shop-api</name>
+<<<<<<< HEAD
+    <description>TikTok Shop API Integration - Spring Boot Microservice</description>
+=======
     <description>TikTok Shop API Spring Boot microservice</description>
+>>>>>>> origin/main
 
     <properties>
         <java.version>17</java.version>
@@ -28,7 +36,11 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
+<<<<<<< HEAD
+        <!-- Spring WebFlux for WebClient -->
+=======
         <!-- Spring Boot WebFlux (WebClient) -->
+>>>>>>> origin/main
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-webflux</artifactId>
@@ -53,17 +65,37 @@
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
 
+<<<<<<< HEAD
+        <!-- Test Dependencies -->
+=======
         <!-- Test dependencies -->
+>>>>>>> origin/main
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+<<<<<<< HEAD
+
+        <!-- Reactor Test for WebClient testing -->
+=======
+>>>>>>> origin/main
         <dependency>
             <groupId>io.projectreactor</groupId>
             <artifactId>reactor-test</artifactId>
             <scope>test</scope>
         </dependency>
+<<<<<<< HEAD
+
+        <!-- MockWebServer for HTTP client testing -->
+        <dependency>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>mockwebserver</artifactId>
+            <version>4.12.0</version>
+            <scope>test</scope>
+        </dependency>
+=======
+>>>>>>> origin/main
     </dependencies>
 
     <build>

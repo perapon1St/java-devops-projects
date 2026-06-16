@@ -1,6 +1,19 @@
 target/
 *.class
 *.jar
+<<<<<<< HEAD
+*.war
+.git
+.gitignore
+.idea
+*.iml
+*.iws
+*.ipr
+.mvn
+mvnw
+mvnw.cmd
+=======
 .idea/
 *.iml
 .DS_Store
+>>>>>>> origin/main

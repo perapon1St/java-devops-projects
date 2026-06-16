@@ -1,3 +1,35 @@
+<<<<<<< HEAD
+com/tiktokshop/dto/ProductReviewResponse$ProductReviewResponseBuilder.class
+com/tiktokshop/dto/ProductDetailResponse$ProductDetailResponseBuilder.class
+com/tiktokshop/exception/ProductNotFoundException.class
+com/tiktokshop/dto/ProductSearchRequest.class
+com/tiktokshop/dto/ProductDetailResponse.class
+com/tiktokshop/config/TiktokShopConfig.class
+com/tiktokshop/dto/ProductDetailResponse$Sku$SkuBuilder.class
+com/tiktokshop/dto/ProductSearchResponse$ProductSearchResponseBuilder.class
+com/tiktokshop/dto/ProductSearchRequest$ProductSearchRequestBuilder.class
+com/tiktokshop/dto/ProductSearchResponse$ProductInfo.class
+com/tiktokshop/dto/ProductSearchResponse$ProductInfo$ProductInfoBuilder.class
+com/tiktokshop/dto/SellerProductResponse$SellerProductResponseBuilder.class
+com/tiktokshop/exception/TiktokShopApiException.class
+com/tiktokshop/dto/ProductDetailResponse$Specification.class
+com/tiktokshop/dto/ProductReviewResponse$Review.class
+com/tiktokshop/dto/ProductReviewResponse$Review$ReviewBuilder.class
+com/tiktokshop/dto/ProductReviewResponse.class
+com/tiktokshop/dto/ProductDetailResponse$Specification$SpecificationBuilder.class
+com/tiktokshop/service/TiktokShopService.class
+com/tiktokshop/TiktokShopApiApplication.class
+com/tiktokshop/dto/SellerProductResponse.class
+com/tiktokshop/controller/ReviewController.class
+com/tiktokshop/dto/ProductDetailResponse$SellerInfo.class
+com/tiktokshop/exception/GlobalExceptionHandler.class
+com/tiktokshop/dto/ProductDetailResponse$SellerInfo$SellerInfoBuilder.class
+com/tiktokshop/controller/SellerController.class
+com/tiktokshop/dto/ProductSearchResponse.class
+com/tiktokshop/client/TiktokShopApiClient.class
+com/tiktokshop/controller/ProductController.class
+com/tiktokshop/dto/ProductDetailResponse$Sku.class
+=======
 com/tiktokshop/dto/ProductReviewResponse.class
 com/tiktokshop/dto/ProductSearchResponse$ProductItem.class
 com/tiktokshop/exception/ProductNotFoundException.class
@@ -18,3 +50,4 @@ com/tiktokshop/dto/ProductDetailResponse$Specification.class
 com/tiktokshop/dto/ProductReviewResponse$Review.class
 com/tiktokshop/client/TiktokShopApiClient.class
 com/tiktokshop/controller/ProductController.class
+>>>>>>> origin/main
